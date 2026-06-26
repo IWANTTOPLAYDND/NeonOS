@@ -95,4 +95,50 @@ button:hover {
 .fade {
   opacity: 0;
   transform: scale(0.98);
+
+/* STEAM STYLE LAYOUT */
+.steam {
+  display: flex;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 200px;
+  background: rgba(10,10,20,0.9);
+  border-right: 1px solid rgba(167,139,250,0.2);
+  padding: 20px;
+  text-align: left;
+}
+
+/* LIBRARY AREA */
+.library {
+  flex: 1;
+  padding: 30px;
+  text-align: center;
+}
+
+/* GAME GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* GAME TILE */
+.game {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(167,139,250,0.2);
+  padding: 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 18px;
+}
+
+.game:hover {
+  transform: scale(1.05);
+  background: rgba(167,139,250,0.2);
+  box-shadow: 0 0 20px rgba(167,139,250,0.2);
 }
