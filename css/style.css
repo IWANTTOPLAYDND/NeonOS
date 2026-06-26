@@ -1,30 +1,98 @@
 body {
   margin: 0;
   font-family: monospace;
-  background: #0b0b12;
+  background: radial-gradient(circle at center, #0f0f1a, #05050a);
   color: white;
-  text-align: center;
+  overflow: hidden;
 }
 
+/* animated grid background */
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background-image:
+    linear-gradient(rgba(167,139,250,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(167,139,250,0.08) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: move 12s linear infinite;
+  transform: rotate(10deg);
+}
+
+@keyframes move {
+  from { transform: translate(0,0) rotate(10deg); }
+  to { transform: translate(-50px,-50px) rotate(10deg); }
+}
+
+/* APP WRAPPER */
+#app {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding-top: 40px;
+}
+
+/* GLASS CARD */
+.card {
+  width: 420px;
+  margin: 20px auto;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(167,139,250,0.25);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(167,139,250,0.1);
+}
+
+/* BUTTONS */
 button {
-  padding: 10px;
-  margin: 5px;
+  padding: 10px 14px;
+  margin: 6px;
   border-radius: 10px;
-  border: 1px solid #a78bfa;
-  background: #1e1e2e;
+  border: 1px solid rgba(167,139,250,0.4);
+  background: rgba(20,20,35,0.8);
   color: white;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
   background: #a78bfa;
   color: black;
+  transform: scale(1.05);
 }
 
-.card {
-  width: 360px;
-  margin: 20px auto;
-  padding: 15px;
-  background: rgba(255,255,255,0.05);
+/* ICON GRID */
+.icon-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.icon {
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
   border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(167,139,250,0.2);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+  background: rgba(167,139,250,0.2);
+}
+
+/* FADE ANIMATION */
+.screen {
+  transition: 0.25s ease;
+}
+
+.fade {
+  opacity: 0;
+  transform: scale(0.98);
 }
