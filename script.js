@@ -1,3 +1,4 @@
+console.log("SCRIPT IS RUNNING");
 window.onload = function () {
 
   const lockscreen = document.getElementById("lockscreen");
