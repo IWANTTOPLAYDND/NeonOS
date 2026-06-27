@@ -144,3 +144,102 @@ window.onload = function () {
   }
 
 };
+
+window.loadGame = function(type) {
+
+  const win = document.createElement("div");
+  win.className = "window";
+  win.style.zIndex = 999;
+
+  let content = "";
+
+  // 🖱 CLICKER
+  if (type === "clicker") {
+
+    let count = 0;
+
+    content = `
+      <div class="window-header">
+        🖱 Clicker
+        <span onclick="this.parentElement.parentElement.remove()">✖</span>
+      </div>
+
+      <p id="clickerValue">0</p>
+      <button id="clickBtn">Click</button>
+    `;
+
+    win.innerHTML = content;
+    document.body.appendChild(win);
+    makeDraggable(win);
+
+    const value = win.querySelector("#clickerValue");
+    const btn = win.querySelector("#clickBtn");
+
+    btn.onclick = () => {
+      count++;
+      value.innerText = count;
+    };
+  }
+
+  // 🎲 GUESS
+  else if (type === "guess") {
+
+    const secret = Math.floor(Math.random() * 5) + 1;
+
+    content = `
+      <div class="window-header">
+        🎲 Guess
+        <span onclick="this.parentElement.parentElement.remove()">✖</span>
+      </div>
+
+      <input id="guessInput" placeholder="1-5">
+      <button id="guessBtn">Check</button>
+      <p id="guessOut"></p>
+    `;
+
+    win.innerHTML = content;
+    document.body.appendChild(win);
+    makeDraggable(win);
+
+    const input = win.querySelector("#guessInput");
+    const out = win.querySelector("#guessOut");
+
+    win.querySelector("#guessBtn").onclick = () => {
+      out.innerText =
+        Number(input.value) === secret ? "Correct 🎉" : "Nope 💀";
+    };
+  }
+
+  // ⚡ REACTION
+  else if (type === "reaction") {
+
+    let start = Date.now();
+
+    content = `
+      <div class="window-header">
+        ⚡ Reaction
+        <span onclick="this.parentElement.parentElement.remove()">✖</span>
+      </div>
+
+      <p>Click fast!</p>
+      <button id="reactBtn">Click</button>
+      <p id="reactOut"></p>
+    `;
+
+    win.innerHTML = content;
+    document.body.appendChild(win);
+    makeDraggable(win);
+
+    const btn = win.querySelector("#reactBtn");
+    const out = win.querySelector("#reactOut");
+
+    btn.onclick = () => {
+      const time = Date.now() - start;
+      out.innerText = time + "ms";
+      start = Date.now();
+    };
+  }
+
+  bringToFront(win);
+  makeDraggable(win);
+};
