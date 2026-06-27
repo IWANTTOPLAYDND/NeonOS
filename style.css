@@ -1,1 +1,93 @@
+body {
+  margin: 0;
+  font-family: monospace;
+  overflow: hidden;
+  color: white;
+}
 
+/* 🌌 WALLPAPER */
+#wallpaper {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #2a1b3d, #120b1a, #07050c);
+  z-index: 0;
+}
+
+/* 🔒 LOCK SCREEN */
+#lockscreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* 🖥️ DESKTOP */
+#desktop {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  padding: 40px;
+  display: none;
+}
+
+/* 🧊 ICONS */
+.icon {
+  width: 120px;
+  padding: 15px;
+  margin: 10px;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(167,139,250,0.2);
+  border-radius: 12px;
+
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.icon:hover {
+  transform: scale(1.05);
+  background: rgba(167,139,250,0.2);
+}
+
+/* 📊 TASKBAR */
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 10px;
+
+  background: rgba(20,20,35,0.8);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(167,139,250,0.2);
+
+  z-index: 5;
+}
+
+button {
+  background: transparent;
+  border: 1px solid rgba(167,139,250,0.4);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #a78bfa;
+  color: black;
+}
