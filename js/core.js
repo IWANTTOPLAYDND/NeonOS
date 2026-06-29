@@ -1,23 +1,27 @@
 "use strict";
 
 /* =========================
-   🧠 NEON OS CORE
+   🧠 NEON OS CORE (CLEAN)
 ========================= */
 
 const NeonOS = {
   z: 10,
 
+  /* =========================
+     🚀 INIT
+  ========================= */
   init() {
     document.addEventListener("DOMContentLoaded", () => {
       this.cache();
-      this.lockSetup();
-      this.restoreWallpaper();
-      console.log("NeonOS Core loaded 💜");
+      this.lockScreen();
+      this.loadWallpaper();
+      this.loadEffects();
+      console.log("NeonOS Core (Clean) loaded 💜");
     });
   },
 
   /* =========================
-     📦 CACHE ELEMENTS
+     📦 CACHE
   ========================= */
   cache() {
     this.lock = document.getElementById("lockscreen");
@@ -25,32 +29,46 @@ const NeonOS = {
   },
 
   /* =========================
-     🔒 LOCK SCREEN
+     🔒 LOCK SCREEN (SAFE)
   ========================= */
-  lockSetup() {
+  lockScreen() {
     if (!this.lock || !this.desktop) return;
 
+    let unlocked = false;
+
     const unlock = () => {
-      this.lock.style.display = "none";
-      this.desktop.style.display = "block";
+      if (unlocked) return;
+      unlocked = true;
+
+      this.lock.style.opacity = "0";
+      this.lock.style.pointerEvents = "none";
+
+      setTimeout(() => {
+        this.lock.style.display = "none";
+        this.desktop.style.display = "block";
+      }, 250);
     };
 
     this.lock.addEventListener("click", unlock);
-    document.addEventListener("keydown", unlock);
+    document.addEventListener("keydown", unlock, { once: true });
   },
 
   /* =========================
-     🪟 WINDOW SYSTEM
+     🪟 WINDOW SYSTEM (STABLE)
   ========================= */
   createWindow(title, content) {
     const win = document.createElement("div");
+
     win.className = "window";
+    win.style.position = "absolute";
+    win.style.top = "120px";
+    win.style.left = "120px";
     win.style.zIndex = this.z++;
 
     win.innerHTML = `
       <div class="window-header">
-        ${title}
-        <span onclick="this.closest('.window').remove()">✖</span>
+        <span>${title}</span>
+        <button class="close-btn">✖</button>
       </div>
       <div class="window-body">
         ${content}
@@ -58,6 +76,10 @@ const NeonOS = {
     `;
 
     document.body.appendChild(win);
+
+    // close button
+    win.querySelector(".close-btn").onclick = () => win.remove();
+
     this.makeDraggable(win);
 
     return win;
@@ -67,25 +89,31 @@ const NeonOS = {
     win.style.zIndex = this.z++;
   },
 
+  /* =========================
+     🖱 DRAG (FIXED)
+  ========================= */
   makeDraggable(win) {
     const header = win.querySelector(".window-header");
     if (!header) return;
 
     let dragging = false;
-    let ox = 0;
-    let oy = 0;
+    let offsetX = 0;
+    let offsetY = 0;
 
     header.addEventListener("mousedown", (e) => {
       dragging = true;
-      ox = e.clientX - win.offsetLeft;
-      oy = e.clientY - win.offsetTop;
+
+      offsetX = e.clientX - win.offsetLeft;
+      offsetY = e.clientY - win.offsetTop;
+
       this.bringToFront(win);
     });
 
     document.addEventListener("mousemove", (e) => {
       if (!dragging) return;
-      win.style.left = (e.clientX - ox) + "px";
-      win.style.top = (e.clientY - oy) + "px";
+
+      win.style.left = (e.clientX - offsetX) + "px";
+      win.style.top = (e.clientY - offsetY) + "px";
     });
 
     document.addEventListener("mouseup", () => {
@@ -106,43 +134,40 @@ const NeonOS = {
 
   openSettings() {
     this.createWindow("⚙ Settings", `
-      <h3>Wallpapers</h3>
+      <h3>🌌 Wallpapers</h3>
 
       <button onclick="NeonOS.setWallpaper('wallpapers/purple.jpg')">💜 Purple</button>
       <button onclick="NeonOS.setWallpaper('wallpapers/blue.jpg')">💙 Blue</button>
       <button onclick="NeonOS.setWallpaper('wallpapers/galaxy.jpg')">🌌 Galaxy</button>
 
-      <h3>Effects</h3>
+      <h3>✨ Effects</h3>
 
-      <button onclick="DesktopFX.set('stars')">⭐ Stars</button>
-      <button onclick="DesktopFX.set('rain')">🌧 Rain</button>
-      <button onclick="DesktopFX.set('particles')">✨ Particles</button>
+      <button onclick="NeonOS.setEffect('stars')">⭐ Stars</button>
+      <button onclick="NeonOS.setEffect('rain')">🌧 Rain</button>
+      <button onclick="NeonOS.setEffect('particles')">✨ Particles</button>
+      <button onclick="NeonOS.setEffect('none')">🚫 None</button>
     `);
   },
 
   /* =========================
-     🎮 GAME LAUNCHER
+     🎮 GAMES
   ========================= */
   openGame(type) {
-
-    let content = "";
 
     if (type === "clicker") {
       let count = 0;
 
-      content = `
-        <p id="c">${count}</p>
-        <button id="btn">Click</button>
-      `;
+      const win = this.createWindow("🖱 Clicker", `
+        <p id="c">0</p>
+        <button id="b">Click</button>
+      `);
 
-      const win = this.createWindow("🖱 Clicker", content);
-
-      const p = win.querySelector("#c");
-      const b = win.querySelector("#btn");
+      const c = win.querySelector("#c");
+      const b = win.querySelector("#b");
 
       b.onclick = () => {
         count++;
-        p.textContent = count;
+        c.textContent = count;
       };
     }
 
@@ -150,7 +175,7 @@ const NeonOS = {
       const secret = Math.floor(Math.random() * 5) + 1;
 
       const win = this.createWindow("🎲 Guess", `
-        <input id="g">
+        <input id="g" placeholder="1-5">
         <button id="b">Check</button>
         <p id="o"></p>
       `);
@@ -172,8 +197,8 @@ const NeonOS = {
       `);
 
       win.querySelector("#b").onclick = () => {
-        const t = Date.now() - start;
-        win.querySelector("#o").textContent = t + "ms";
+        const time = Date.now() - start;
+        win.querySelector("#o").textContent = time + "ms";
         start = Date.now();
       };
     }
@@ -190,9 +215,58 @@ const NeonOS = {
     localStorage.setItem("wallpaper", path);
   },
 
-  restoreWallpaper() {
+  loadWallpaper() {
     const saved = localStorage.getItem("wallpaper");
     if (saved) this.setWallpaper(saved);
+  },
+
+  /* =========================
+     ✨ EFFECTS (SIMPLE HOOK)
+  ========================= */
+  setEffect(effect) {
+    localStorage.setItem("effect", effect);
+    this.loadEffects();
+  },
+
+  loadEffects() {
+    const fx = localStorage.getItem("effect");
+
+    const layer = document.getElementById("desktopEffects");
+    if (!layer) return;
+
+    layer.innerHTML = "";
+
+    if (fx === "stars") this.spawnStars(layer);
+    if (fx === "rain") this.spawnRain(layer);
+    if (fx === "particles") this.spawnParticles(layer);
+  },
+
+  spawnStars(layer) {
+    for (let i = 0; i < 50; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = Math.random() * 100 + "vh";
+      layer.appendChild(s);
+    }
+  },
+
+  spawnRain(layer) {
+    for (let i = 0; i < 60; i++) {
+      const r = document.createElement("div");
+      r.className = "rain-drop";
+      r.style.left = Math.random() * 100 + "vw";
+      layer.appendChild(r);
+    }
+  },
+
+  spawnParticles(layer) {
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      p.style.left = Math.random() * 100 + "vw";
+      layer.appendChild(p);
+    }
   }
 };
 
